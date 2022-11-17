@@ -12,11 +12,11 @@ jobs:
 
       - name: Write the Thing
         continue-on-error: true
-        run: exit 1; echo container_exists=$? >> $GITHUB_ENV
+        run: exit 1 | echo container_exists=$? >> $GITHUB_ENV
 
       - name: Read the Thing
         run: echo ${{ env.container_exists }}
 
       - name: Read the Thing
-        if: ${{ env.container_exists }} == '0'
+        if: ${{ env.container_exists  == '0' }}
         run: echo "Run this?"
