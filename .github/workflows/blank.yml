@@ -18,5 +18,10 @@ jobs:
         run: echo ${{ env.container_exists }}
 
       - name: Read the Thing
-        if: ${{ env.container_exists  == '0' }}
-        run: echo "Run this?"
+        run: |
+          if echo ${{ env.container_exists  == '0' }} | grep -c "true"
+          then
+            echo "Run this?"
+          else
+            echo "Skipped!"
+          fi
