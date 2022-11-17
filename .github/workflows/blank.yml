@@ -19,7 +19,7 @@ jobs:
 
       - name: Read the Thing
         run: |
-          if echo ${{ env.container_exists  == '0' }} | grep -c "true"
+          if echo ${{ env.container_exists  == '1' }} | grep -c "true"
           then
             echo "Run this?"
           else
