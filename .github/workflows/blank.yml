@@ -1,8 +1,7 @@
-
 name: CI
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -10,6 +9,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Run a one-line script
-        run: echo Hello, world!
+
+      - name: Write the Thing
+        run: exit 1; echo container_exists=$? >> $GITHUB_ENV
+
+      - name: Read the Thing
+        run: echo ${{ env.container_exists }}
+
+      - name: Read the Thing
+        if: ${{ env.container_exists }} == '0'
+        run: echo "Run this?"
