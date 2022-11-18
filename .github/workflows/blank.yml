@@ -29,16 +29,16 @@ jobs:
       - name: Check if Version Already Exists in Container Registry
         id: version-exists
         continue-on-error: true
-        run: docker manifest inspect registry.digitalocean.com/spacedoglabs/backends:bout-heck > /dev/null | echo "container_exists=$?" >> $GITHUB_ENV
+        run: docker manifest inspect registry.digitalocean.com/spacedoglabs/backends:bout-heck > /dev/null || echo "container_exists=$?" >> $GITHUB_ENV
 
       - name: Read the Thing
         run: echo ${{ env.container_exists }}
 
       - name: Read the Thing
         run: |
-          if echo ${{ env.container_exists  == '0' }} | grep -c "true"
+          if echo ${{ env.container_exists  == '1' }} | grep -c "true"
           then
-            echo "Skipped! Container exists."
-          else
             echo "Build and push it! It doesn't exists."
+          else
+            echo "Skipped! Container exists."
           fi
