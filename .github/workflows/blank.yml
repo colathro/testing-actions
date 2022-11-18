@@ -18,18 +18,27 @@ jobs:
       - name: Get nodes
         run: kubectl get nodes
 
-      - name: Write the Thing
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN }}
+
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 6000
+
+      - name: Check if Version Already Exists in Container Registry
+        id: version-exists
         continue-on-error: true
-        run: exit 1 | echo container_exists=$? >> $GITHUB_ENV
+        run: docker manifest inspect registry.digitalocean.com/spacedoglabs/backends:bout-heck > /dev/null | echo "container_exists=$?" >> $GITHUB_ENV
 
       - name: Read the Thing
         run: echo ${{ env.container_exists }}
 
       - name: Read the Thing
         run: |
-          if echo ${{ env.container_exists  == '1' }} | grep -c "true"
+          if echo ${{ env.container_exists  == '0' }} | grep -c "true"
           then
-            echo "Run this?"
+            echo "Skipped! Container exists."
           else
-            echo "Skipped!"
+            echo "Build and push it! It doesn't exists."
           fi
